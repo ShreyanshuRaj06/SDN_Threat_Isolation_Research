@@ -77,4 +77,4 @@ No target numbers are set because nothing is measured yet *(do not invent them)*
 ## 9. Risks, assumptions, open questions
 **Risks:** broad source-IP blocks hitting shared addresses; NAT hiding the real subject; encrypted payloads invisible to Suricata; internal OVS traffic bypassing the gateway/IPS; polling backlog slowing response; feature mismatch between training and live data; leaked captures containing credentials.
 **Assumptions:** isolated Linux/Mininet lab; 16 GB RAM prototype host (not a capacity guarantee); one switch per Ryu path.
-**Open questions:** fail-closed vs fail-open for Suricata; enforcement endpoint and authentication choice; Bi-LSTM framework; which features are truly available from OVS at decision time; InSDN field mapping; S3 retention mode and period.
+**Open questions & resolution:** fail-closed vs fail-open for Suricata; enforcement endpoint and authentication choice; Bi-LSTM resolved using PyTorch; decision-time features frozen to 6-contract metrics; InSDN and CNS 2022 column mappings resolved; S3 retention mode and period.

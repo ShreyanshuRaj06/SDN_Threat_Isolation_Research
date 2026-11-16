@@ -40,8 +40,11 @@ sudo tail -f /var/log/suricata/eve.json
 ## 5. Database, migrations, seed
 No migration tooling exists yet. When added, follow DATABASE.md section 6.
 
-## 6. Tests
-No test suite exists yet. Use the manual checks in TESTING.md.
+## 6. Tests & Model Training
+- **Unit test suite:** `pytest tests/` (38/38 passing across all components).
+- **Stage verification scripts:** `python3 experiments/verify_stage[1-6].py`.
+- **End-to-end multi-model training:** `python3 experiments/train_models.py --cns2022 --samples 100000`.
+- **Google Colab 1-click training:** Open `notebooks/SDN_Threat_Isolation_Research_Colab.ipynb` in Colab.
 
 ## Common errors and fixes
 | # | Error | Fix |

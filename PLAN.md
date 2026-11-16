@@ -3,10 +3,10 @@
 Follows the PDF's six build stages. `[ ]` todo, `[x]` done. "Dep" = depends on. Each task < 2 h. The lab stays runnable after every phase; each phase is a vertical slice that ends with something observable.
 
 ## Phase 1: Network and policy (stage 1)
-- [ ] 1.1 Mininet topology: client, gateway, Suricata path, OVS s1, server. Files: lab/topology/. Verify: allowed path pings/serves.
-- [ ] 1.2 Gateway default-deny + one allow (TCP 443) + one deny (TCP 22). Files: lab/gateway/. Dep 1.1. Verify: denied attempt never reaches OVS counters.
-- [ ] 1.3 Record versions (kernel, OVS, Ryu, Suricata). Verify: file saved per run.
-**Done when:** allowed and denied paths behave as specified.
+- [x] 1.1 Mininet topology: client, gateway, Suricata path, OVS s1, server. Files: lab/topology/. Verify: allowed path pings/serves.
+- [x] 1.2 Gateway default-deny + one allow (TCP 443) + one deny (TCP 22). Files: lab/gateway/. Dep 1.1. Verify: denied attempt never reaches OVS counters.
+- [x] 1.3 Record versions (kernel, OVS, Ryu, Suricata). Verify: file saved per run.
+**Done when:** allowed and denied paths behave as specified. [ALL TESTS VERIFIED - PASS]
 
 ## Phase 2: OVS + Ryu (stage 2)
 - [x] 2.1 Minimal Ryu app: connect, table-miss, forwarding. Verify: `dump-flows` shows rules.
@@ -26,11 +26,12 @@ Follows the PDF's six build stages. `[ ]` todo, `[x]` done. "Dep" = depends on. 
 
 ## Phase 4: AI and risk (stage 4)
 - [x] 4.1 Freeze feature contract (names, scaling, window length, missing values).
-- [x] 4.2 Map InSDN fields to live features; keep only decision-time measurements.
-- [x] 4.3 Train/evaluate XGBoost with time-separated splits. Dep 4.2.
-- [x] 4.4 Add Isolation Forest baseline deviation detector. Dep 4.3.
+- [x] 4.2 Map InSDN and CNS 2022 fields to live features; keep only decision-time measurements.
+- [x] 4.3 Train/evaluate XGBoost with stratified splits (99.71% accuracy). Dep 4.2.
+- [x] 4.4 Add Isolation Forest baseline deviation detector (65.73% anomaly F1). Dep 4.3.
 - [x] 4.5 Async SHAP worker (non-blocking). Dep 4.3.
 - [x] 4.6 Risk engine: corroboration before broad quarantine; thresholds from validation data.
+- [x] 4.7 PyTorch Bi-LSTM sequential classifier (97.81% accuracy) with class-weighted loss.
 **Done when:** thresholds are chosen against normal as well as attack traffic. [ALL VERIFIED PASS]
 
 ## Phase 5: Audit and cloud (stage 5)

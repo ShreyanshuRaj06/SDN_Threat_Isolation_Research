@@ -10,7 +10,7 @@ Reads: PRD.md, DESIGN.md. No application code. Design specification, not a deplo
 | Lab | Linux + Mininet | Matches the PDF's validation setup |
 | Inline IPS | Suricata (inline, two interfaces) | Signature drops plus EVE events |
 | Services | Python (alert listener, feature extractor, risk engine, logger, sealer, verifier) | Same language as Ryu *(assumption)* |
-| Models | XGBoost, Bi-LSTM, Isolation Forest (scikit-learn), SHAP/LIME | Roles given in the slides. **Bi-LSTM framework not specified: decide** |
+| Models | XGBoost, PyTorch Bi-LSTM, Isolation Forest (scikit-learn), SHAP | Benchmarked on DistriNet IEEE CNS 2022 dataset |
 | Local store | SQLite durable spool + append-only events *(proposal)* | Simple, survives restarts, no extra server |
 | Cloud | S3 Object Lock, CloudWatch Logs, SageMaker | From the PDF; never on the urgent path |
 | Validation | Wireshark/TShark | Packet visibility in controlled tests |
