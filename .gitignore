@@ -47,8 +47,7 @@ incident_store.db
 .env.*
 *.secret
 
-# ── Private Paper Draft (Kept local & private for Overleaf submission) ───────
-paper_manuscript/
+# ── LaTeX build artifacts ───────────────────────────────────────────────────
 *.aux
 *.bbl
 *.blg
