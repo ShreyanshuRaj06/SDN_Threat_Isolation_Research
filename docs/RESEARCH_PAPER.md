@@ -13,7 +13,7 @@ Software-Defined Networking (SDN) decouples network control logic from forwardin
 
 In this paper, we propose and evaluate an end-to-end, multi-stage SDN threat containment framework that bridges fast signature inspection, multi-model behavioral AI inference, scoped OpenFlow enforcement, and cryptographic evidence sealing. Our behavioral subsystem operates on an explicit, frozen 6-feature rate contract extracted from Open vSwitch (OVS) flow statistics over actual elapsed sample intervals ($\Delta t$), eliminating assumptions of uniform polling. The subsystem employs three complementary models: an **XGBoost classifier** for ultra-low-latency tabular classification (0.12 ms inference), a **PyTorch Bidirectional Long Short-Term Memory (Bi-LSTM)** network for temporal rate dynamics (0.45 ms inference), and an **unsupervised Isolation Forest** for baseline deviation detection.
 
-We benchmark our architecture against the corrected **IEEE CNS 2022 NIDS dataset suite** (DistriNet, KU Leuven: improved CIC-IDS-2017 and CSE-CIC-IDS-2018). We rigorously diagnose the prevalent **"0.50 Accuracy Trap"**—demonstrating that naive chronological slicing over bursty attack captures starves training sets of attack classes, while unresolved "Attempted" flows (failed attacks that exhibit benign physical network characteristics) degrade decision boundaries. By introducing stratified temporal block sampling, attempted-flow relabeling, and class-weighted optimization, our models achieve state-of-the-art publication benchmarks: **>99.4% Accuracy and 0.992 Macro F1** for XGBoost, **98.7% Accuracy and 0.985 Macro F1** for Bi-LSTM, and **0.941 Anomaly F1** for Isolation Forest. All enforcement decisions generate strictly scoped OpenFlow rules with mandatory cryptographic cookies and expiring time-to-live (TTL) bounds, verified through barrier requests, and recorded in a tamper-evident ECDSA/SHA-256 hash-chain audit spool.
+We benchmark our architecture against the corrected **IEEE CNS 2022 NIDS dataset suite** (DistriNet, KU Leuven: improved CIC-IDS-2017 and CSE-CIC-IDS-2018). We address critical data-plane representation challenges—demonstrating that uncurated chronological slicing over bursty attack captures induces severe distribution shift, while unresolved "Attempted" flows (failed attacks that exhibit benign physical network characteristics) degrade decision boundaries. By introducing stratified temporal block sampling, attempted-flow relabeling, and class-weighted optimization, our models achieve state-of-the-art publication benchmarks: **>99.4% Accuracy and 0.992 Macro F1** for XGBoost, **98.7% Accuracy and 0.985 Macro F1** for Bi-LSTM, and **0.941 Anomaly F1** for Isolation Forest. All enforcement decisions generate strictly scoped OpenFlow rules with mandatory cryptographic cookies and expiring time-to-live (TTL) bounds, verified through barrier requests, and recorded in a tamper-evident ECDSA/SHA-256 hash-chain audit spool.
 
 ---
 
@@ -29,7 +29,7 @@ Furthermore, when an anomaly is identified, conventional systems frequently comm
 - **Unified Defense Pipeline:** Combines early least-privilege gateway rejection, inline Suricata Deep Packet Inspection (DPI), and controller-driven behavioral telemetry.
 - **Frozen 6-Feature Rate Contract:** Formulates rate extraction exclusively from mid-flow statistical counters over actual measured $\Delta t$, with explicit detection of switch reboots and counter resets.
 - **Multi-Model Corroboration Engine:** Pairs supervised XGBoost and Bi-LSTM classifiers with an unsupervised Isolation Forest baseline detector to prevent single-model hallucination or false-positive quarantines.
-- **Resolution of the "0.50 Accuracy Trap":** Diagnoses the mathematical and structural causes of the 50% accuracy ceiling in NIDS training and provides an automated, publication-grade dataset pipeline utilizing the DistriNet IEEE CNS 2022 benchmark.
+- **Dataset Representation & Label Disambiguation:** Resolves temporal distribution shifts and attempted-flow label noise through stratified sampling and DistriNet IEEE CNS 2022 dataset alignment.
 - **Scoped, Ephemeral Enforcement:** Mandates that every OpenFlow mitigation action includes a 4-tuple match (`src_ip`, `dst_ip`, `ip_proto`, `dst_port`), an expiring TTL (default 60s), and a unique rule cookie, followed by OpenFlow barrier readback verification.
 - **Tamper-Evident Evidence Sealing:** Independently logs the full decision lifecycle into an append-only hash chain signed via ECDSA (secp256r1) and sealed with AES-256-GCM.
 
@@ -107,15 +107,15 @@ No negative rates are emitted. The feature vector flags the reset and falls back
 
 ---
 
-## 4. The "0.50 Accuracy Trap": Diagnosis and Theoretical Solution
+## 4. Dataset Preprocessing, Distribution Alignment, and Label Sanitization
 
-### 4.1 Root Causes of the 0.50 Accuracy Ceiling
-In network intrusion detection research, training models on benchmarks like CSE-CIC-IDS-2018 or CIC-IDS-2017 frequently yields models that achieve exactly 50.0% accuracy (equivalent to random guessing or degenerate majority-class prediction). Our investigation identified four systemic causes:
+### 4.1 Temporal Distribution Shift and Attempted-Flow Label Noise
+In network intrusion detection research, training models on benchmarks like CSE-CIC-IDS-2018 or CIC-IDS-2017 often suffers from severe distribution shift and label degradation if raw captures are naively sliced without structural normalization. Our analysis identifies four systemic challenges:
 
 1. **Temporal Partitioning on Chronologically Grouped Captures:**
-   In the original CIC-IDS captures, benign background traffic was recorded during morning hours, while attack scenarios (e.g. DoS, PortScan, Brute Force) were launched in concentrated afternoon bursts. Applying a naive temporal slice:
+   In the original CIC-IDS captures, benign background traffic was recorded during morning hours, while attack scenarios (e.g. DoS, PortScan, Brute Force) were launched in concentrated afternoon bursts. Applying an uncurated temporal slice:
    $$\mathcal{D}_{\text{train}} = \mathcal{D}[0 : 0.8N], \quad \mathcal{D}_{\text{test}} = \mathcal{D}[0.8N : N]$$
-   results in a training set with 100% benign flows and 0% attack flows. Consequently, the classifier converges to predicting only `benign`. When evaluated on a test set containing the attack spike, the classifier produces an accuracy of exactly 50% on balanced evaluations.
+   results in a training set with 100% benign flows and 0% attack flows. Consequently, the classifier converges to predicting only `benign`. When evaluated on a test set containing the attack spike, the classifier produces degenerate evaluations.
 
 2. **The "Attempted" Attack Flow Confound (IEEE CNS 2022 Finding):**
    Researchers at DistriNet (Liu et al., IEEE CNS 2022) revealed that thousands of flows in CIC datasets were failed connection attempts (e.g., TCP SYN with no reply) labeled as attacks. These flows have zero payload and identical feature representations to failed benign handshakes. Leaving them labeled as attacks forces machine learning models to separate identical vectors with conflicting labels, collapsing gradient optimization.
@@ -217,6 +217,6 @@ and encrypted with AES-256-GCM before asynchronous replication to Amazon S3 with
 
 ## 8. Conclusion and Reproducibility
 
-We have presented an integrated, AI-driven SDN threat isolation architecture that closes the containment latency gap while preventing collateral damage. By establishing a frozen 6-feature rate contract, resolving the "0.50 Accuracy Trap" through DistriNet CNS 2022 dataset alignment, and enforcing scoped, expiring OpenFlow rules, this work delivers a reproducible, publication-grade benchmark for next-generation SDN security.
+We have presented an integrated, AI-driven SDN threat isolation architecture that closes the containment latency gap while preventing collateral damage. By establishing a frozen 6-feature rate contract, eliminating distribution shift and attempted-flow noise through DistriNet CNS 2022 dataset alignment, and enforcing scoped, expiring OpenFlow rules, this work delivers a reproducible, publication-grade benchmark for next-generation SDN security.
 
 All implementation code, pre-configured training pipelines, and Google Colab notebooks are open-source and structured for immediate peer verification.

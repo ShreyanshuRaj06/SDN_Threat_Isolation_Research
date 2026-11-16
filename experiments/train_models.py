@@ -19,15 +19,13 @@ Models Trained:
   2. PyTorch Bidirectional LSTM (Bi-LSTM) Classifier (Sequential rate modeling)
   3. Isolation Forest Detector (Unsupervised baseline anomaly deviation)
 
-Why Previous Training Failed with 0.5 Accuracy (The 0.5 Accuracy Trap):
-  1. Temporal Slicing on Ordered CSVs: Attack scenarios in NIDS datasets occur in discrete
-     time blocks. Naive `X[:80%]` sliced 100% benign flows into train and attack spikes
-     into test. The model predicted only the majority class, collapsing accuracy to 50%.
-  2. CNS 2022 'Attempted' Label Noise: Flow records marked '- Attempted' represent non-malicious
-     attempts. Leaving them as attacks confuses classification boundaries.
-  3. Feature Header Mismatch: CICFlowMeter column variants ('Pkt Len Mean', 'Tot Fwd Pkts')
-     were missed, causing features to default to 0.0.
-  4. Extreme Imbalance without Sample Weighting: Minority classes starved without weights.
+Key Preprocessing & Modeling Principles:
+  1. Stratified Partitioning: Avoids chronological distribution shift by ensuring proportional
+     class representation across train and test partitions.
+  2. CNS 2022 'Attempted' Label Sanitization: Flow records marked '- Attempted' represent non-malicious
+     attempts. Mapping them to benign removes label ambiguity and sharpens decision boundaries.
+  3. Feature Header Harmonization: Resolves all CICFlowMeter variants ('Pkt Len Mean', 'Tot Fwd Pkts').
+  4. Class-Balanced Sample Weighting: Ensures minority attack classes receive proportional gradient weight.
 
 Usage:
   # Automated Colab/Research training directly from DistriNet CNS2022 (no physical download needed):
@@ -110,7 +108,7 @@ def make_synthetic_dataset(n_samples: int = 4000, seed: int = 42) -> Tuple[np.nd
 
 
 # ---------------------------------------------------------------------------
-# Robust Train/Test Split (Fixing the 0.5 Accuracy Trap)
+# Robust Stratified Train/Test Split
 # ---------------------------------------------------------------------------
 def split_data(
     X: np.ndarray,
