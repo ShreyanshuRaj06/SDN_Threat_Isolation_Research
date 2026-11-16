@@ -60,7 +60,7 @@ An autonomous, multi-layered threat detection and isolation system inside an Ope
 | **Phase 4** | XGBoost + Isolation Forest + SHAP Corroboration | ✅ **4/4 PASS** | `verify_stage4.py` |
 | **Phase 5** | SHA-256 Chain + ECDSA + AES-256-GCM Sealing | ✅ **4/4 PASS** | `verify_stage5.py` |
 | **Phase 6** | Adaptive Polling + Switch Reconciler | ✅ **4/4 PASS** | `verify_stage6.py` |
-| **Research Paper** | Multi-Model Benchmark (XGBoost, Bi-LSTM, IForest) on DistriNet CNS 2022 | ✅ **Publication Grade** | `docs/RESEARCH_PAPER.md` |
+| **System Evaluation** | Multi-Model Benchmark (XGBoost, Bi-LSTM, IForest) on DistriNet CNS 2022 | ✅ **Benchmark Complete** | `docs/SYSTEM_EVALUATION.md` |
 | **Google Colab** | 1-Click Research Notebook with Zero-Download Ingestion | ✅ **Ready** | `notebooks/SDN_Threat_Isolation_Research_Colab.ipynb` |
 | **Unit Tests** | All modules across all phases | ✅ **38/38 PASS** | `pytest tests/` |
 
