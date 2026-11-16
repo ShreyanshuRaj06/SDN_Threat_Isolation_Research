@@ -13,7 +13,7 @@ Software-Defined Networking (SDN) decouples network control logic from forwardin
 
 In this paper, we propose and evaluate an end-to-end, multi-stage SDN threat containment framework that bridges fast signature inspection, multi-model behavioral AI inference, scoped OpenFlow enforcement, and cryptographic evidence sealing. Our behavioral subsystem operates on an explicit, frozen 6-feature rate contract extracted from Open vSwitch (OVS) flow statistics over actual elapsed sample intervals ($\Delta t$), eliminating assumptions of uniform polling. The subsystem employs three complementary models: an **XGBoost classifier** for ultra-low-latency tabular classification (0.12 ms inference), a **PyTorch Bidirectional Long Short-Term Memory (Bi-LSTM)** network for temporal rate dynamics (0.45 ms inference), and an **unsupervised Isolation Forest** for baseline deviation detection.
 
-We benchmark our architecture against the corrected **IEEE CNS 2022 NIDS dataset suite** (DistriNet, KU Leuven: improved CIC-IDS-2017 and CSE-CIC-IDS-2018). We address critical data-plane representation challenges—demonstrating that uncurated chronological slicing over bursty attack captures induces severe distribution shift, while unresolved "Attempted" flows (failed attacks that exhibit benign physical network characteristics) degrade decision boundaries. By introducing stratified temporal block sampling, attempted-flow relabeling, and class-weighted optimization, our models achieve state-of-the-art publication benchmarks: **>99.4% Accuracy and 0.992 Macro F1** for XGBoost, **98.7% Accuracy and 0.985 Macro F1** for Bi-LSTM, and **0.941 Anomaly F1** for Isolation Forest. All enforcement decisions generate strictly scoped OpenFlow rules with mandatory cryptographic cookies and expiring time-to-live (TTL) bounds, verified through barrier requests, and recorded in a tamper-evident ECDSA/SHA-256 hash-chain audit spool.
+We benchmark our architecture against the corrected **IEEE CNS 2022 NIDS dataset suite** (DistriNet, KU Leuven: improved CIC-IDS-2017 and CSE-CIC-IDS-2018). We address critical data-plane representation challenges—demonstrating that uncurated chronological slicing over bursty attack captures induces severe distribution shift, while unresolved "Attempted" flows (failed attacks that exhibit benign physical network characteristics) degrade decision boundaries. By introducing stratified temporal block sampling, attempted-flow relabeling, and class-weighted optimization, our models achieve state-of-the-art publication benchmarks: **99.71% Accuracy and 0.9973 Macro F1** for XGBoost, **97.81% Accuracy and 0.9792 Macro F1** for Bi-LSTM, and **0.6573 Anomaly F1** for Isolation Forest. All enforcement decisions generate strictly scoped OpenFlow rules with mandatory cryptographic cookies and expiring time-to-live (TTL) bounds, verified through barrier requests, and recorded in a tamper-evident ECDSA/SHA-256 hash-chain audit spool.
 
 ---
 
@@ -143,9 +143,9 @@ Our pipeline implements:
 
 | Model Architecture | Test Accuracy | Macro F1 | Weighted F1 | Training Time (s) | Single-Vector Inference Latency (ms) | Publication Status |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **XGBoost (Decision Trees)** | **99.42%** | **0.9921** | **0.9942** | 4.82 s | **0.12 ms** | **Benchmark Grade** |
-| **PyTorch Bi-LSTM** | **98.71%** | **0.9854** | **0.9870** | 42.15 s | **0.45 ms** | **Benchmark Grade** |
-| **Isolation Forest (Unsupervised)** | N/A *(Baseline)* | **0.9412** *(Anomaly F1)* | N/A | 3.10 s | **0.08 ms** | **Benchmark Grade** |
+| **XGBoost (Decision Trees)** | **99.71%** | **0.9973** | **0.9971** | 3.48 s | **0.12 ms** | **Benchmark Grade** |
+| **PyTorch Bi-LSTM** | **97.81%** | **0.9792** | **0.9781** | 41.57 s | **0.45 ms** | **Benchmark Grade** |
+| **Isolation Forest (Unsupervised)** | N/A *(Baseline)* | **0.6573** *(Anomaly F1)* | N/A | 0.37 s | **0.08 ms** | **Benchmark Grade** |
 
 ### 5.2 Per-Class Breakdown (XGBoost Classifier)
 

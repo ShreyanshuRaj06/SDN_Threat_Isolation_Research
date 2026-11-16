@@ -87,7 +87,7 @@ To guarantee unbiased evaluation and state-of-the-art classifier convergence:
 Open and run `notebooks/SDN_Threat_Isolation_Research_Colab.ipynb` in [Google Colab](https://colab.research.google.com).
 It automatically:
 - Streams and samples the DistriNet CNS 2022 dataset directly via HTTP (zero local download needed).
-- Trains **XGBoost** (>99.4% accuracy), **PyTorch Bi-LSTM** (>98.7% accuracy), and **Isolation Forest** (0.941 F1).
+- Trains **XGBoost** (99.71% accuracy, 0.9973 F1), **PyTorch Bi-LSTM** (97.81% accuracy, 0.9792 F1), and **Isolation Forest** (65.73% anomaly F1).
 - Generates publication-ready confusion matrices, ROC curves, and SHAP beeswarm plots.
 - Exports a ready-to-copy LaTeX table (`paper_results_table.tex`) for Overleaf.
 
