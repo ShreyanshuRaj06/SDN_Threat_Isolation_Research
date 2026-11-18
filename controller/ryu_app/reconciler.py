@@ -67,8 +67,11 @@ class SwitchReconciler:
         Dumps live OpenFlow 1.3 flows from OVS and parses flow records.
         """
         cmd = ["ovs-ofctl", "dump-flows", self.switch_id, "-O", "OpenFlow13"]
-        res = subprocess.run(cmd, capture_output=True, text=True)
-        if res.returncode != 0:
+        try:
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                return []
+        except (FileNotFoundError, PermissionError):
             return []
 
         flows = []
@@ -188,9 +191,12 @@ class SwitchReconciler:
                             "ovs-ofctl", "-O", "OpenFlow13", "add-flow", self.switch_id,
                             f"cookie={cookie},priority={prio},hard_timeout={remaining_ttl},{match_str},actions={act_cmd}"
                         ]
-                        res = subprocess.run(cmd, capture_output=True, text=True)
-                        if res.returncode == 0:
-                            reinstalled += 1
+                        try:
+                            res = subprocess.run(cmd, capture_output=True, text=True)
+                            if res.returncode == 0:
+                                reinstalled += 1
+                        except (FileNotFoundError, PermissionError):
+                            pass
 
         conn.commit()
         conn.close()

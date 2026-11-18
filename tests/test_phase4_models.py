@@ -87,6 +87,10 @@ def synthetic_data():
 # ---------------------------------------------------------------------------
 
 class TestXGBoostClassifier:
+    @pytest.fixture(autouse=True)
+    def require_xgboost(self):
+        pytest.importorskip("xgboost")
+
     def test_train_returns_actual_accuracy(self, synthetic_data, tmp_path):
         """XGBoost training returns a measured accuracy, not None."""
         from ai.models.xgboost_classifier import XGBoostThreatClassifier
@@ -318,6 +322,7 @@ class TestAICorroborationLogic:
 class TestShapExplainer:
     def test_submit_does_not_block(self, synthetic_data, tmp_path):
         """Submitting a SHAP job returns immediately (non-blocking)."""
+        pytest.importorskip("xgboost")
         import time
         from ai.models.xgboost_classifier import XGBoostThreatClassifier
         from ai.explain.explainer import ShapExplainer, ExplanationJob
