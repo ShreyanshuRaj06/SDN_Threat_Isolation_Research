@@ -41,8 +41,9 @@ sudo tail -f /var/log/suricata/eve.json
 No migration tooling exists yet. When added, follow DATABASE.md section 6.
 
 ## 6. Tests & Model Training
-- **Unit test suite:** `pytest tests/` (38/38 passing across all components).
+- **Unit test suite:** `pytest tests/` (48 tests passing across all components).
 - **Stage verification scripts:** `python3 experiments/verify_stage[1-6].py`.
+- **Pretrained models download:** Grab serialized weights (`.pkl`, `.pt`) from [GitHub Releases v1.0.0](https://github.com/ShreyanshuRaj06/SDN_Threat_Isolation_Research/releases/tag/v1.0.0).
 - **End-to-end multi-model training:** `python3 experiments/train_models.py --cns2022 --samples 100000`.
 - **Google Colab 1-click training:** Open `notebooks/SDN_Threat_Isolation_Research_Colab.ipynb` in Colab.
 

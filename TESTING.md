@@ -1,6 +1,6 @@
 # TESTING: AI-Driven SDN Threat Isolation
 
-Comprehensive testing suite covering unit tests, stage verification scripts, and multi-model benchmark evaluation. All 38 unit tests pass cleanly, and Stages 1–6 are verified.
+Comprehensive testing suite covering unit tests, stage verification scripts, and multi-model benchmark evaluation. All 48 unit tests pass cleanly, and Stages 1–6 are verified.
 
 ## Priorities (critical first)
 1. Enforcement correctness and rollback. 2. No fake outcomes (requested != blocked). 3. Safe failure modes. 4. Timing measurements. 5. Detection quality. 6. Evidence integrity.

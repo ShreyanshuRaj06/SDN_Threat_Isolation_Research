@@ -90,8 +90,13 @@ It automatically:
 - Trains **XGBoost** (99.71% accuracy, 0.9973 F1), **PyTorch Bi-LSTM** (97.81% accuracy, 0.9792 F1), and **Isolation Forest** (65.73% anomaly F1).
 - Generates publication-ready confusion matrices, ROC curves, and SHAP beeswarm plots.
 - Exports a ready-to-copy LaTeX table (`paper_results_table.tex`) for Overleaf.
+- Automatically exports serialized model weights (`.pkl`, `.pt`) and encoders.
 
-#### Option B: Headless Automated CLI
+#### Option B: Pretrained Model Binaries (GitHub Releases)
+If you do not want to re-train from scratch, download pre-compiled model binaries (`xgboost_cns2022.pkl`, `bilstm_cns2022.pt`, `isolation_forest.pkl`, `scaler_and_encoder.pkl`) directly from:
+- **[GitHub Release v1.0.0](https://github.com/ShreyanshuRaj06/SDN_Threat_Isolation_Research/releases/tag/v1.0.0)**
+
+#### Option C: Headless Automated CLI
 ```bash
 # Automatically downloads CNS2022 dataset and trains all 3 models:
 python3 experiments/train_models.py --cns2022 --samples 100000
