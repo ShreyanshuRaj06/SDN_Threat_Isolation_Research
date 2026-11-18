@@ -2,7 +2,7 @@
 
 An autonomous, multi-layered threat detection and isolation system inside an OpenFlow 1.3 Software-Defined Network (SDN). Combines edge access control, inline Deep Packet Inspection (Suricata), behavioral AI (XGBoost, Isolation Forest, SHAP), dynamic OpenFlow mitigation (Ryu), and tamper-evident cryptographic evidence sealing (SHA-256 hash chain, ECDSA, AES-256-GCM).
 
-> **Status:** All 6 implementation phases complete — 38/38 unit tests pass, Stages 2–6 verified.
+> **Status:** All 6 implementation phases complete — 48 unit tests passing across all tiers, Stages 2–6 verified.
 
 ---
 
@@ -62,7 +62,7 @@ An autonomous, multi-layered threat detection and isolation system inside an Ope
 | **Phase 6** | Adaptive Polling + Switch Reconciler | ✅ **4/4 PASS** | `verify_stage6.py` |
 | **System Evaluation** | Multi-Model Benchmark (XGBoost, Bi-LSTM, IForest) on DistriNet CNS 2022 | ✅ **Benchmark Complete** | `docs/SYSTEM_EVALUATION.md` |
 | **Google Colab** | 1-Click Research Notebook with Zero-Download Ingestion | ✅ **Ready** | `notebooks/SDN_Threat_Isolation_Research_Colab.ipynb` |
-| **Unit Tests** | All modules across all phases | ✅ **38/38 PASS** | `pytest tests/` |
+| **Unit Tests** | All modules across all phases | ✅ **48/48 PASS** | `pytest tests/` |
 
 ---
 
